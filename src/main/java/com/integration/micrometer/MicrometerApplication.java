@@ -5,8 +5,13 @@ import java.time.Duration;
 import com.integration.micrometer.model.Order;
 import com.integration.micrometer.service.BeerService;
 import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.config.MeterFilter;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +26,33 @@ public class MicrometerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MicrometerApplication.class, args);
 		System.out.println("Application Started");
+	}
+
+
+	@Bean
+	public MeterFilter meterFilter() {
+		return new MeterFilter() {
+			@Override
+			public Meter.Id map(Meter.Id id) {
+				if ("http.client.requests".equals(id.getName())) {
+					String urlIdentifier="";
+					String uri = id.getTag("uri");
+					if(StringUtils.isNotEmpty(uri)) {
+						String urlIdentifierArray[] = uri.split("/");
+						if(urlIdentifierArray.length>0) {
+							urlIdentifier = urlIdentifierArray[0];
+						}
+					}
+					return new Meter.Id(id.getName(), Tags.of("clientName",id.getTag("clientName"),"method",id.getTag("method"),"status",id.getTag("status"),"uri",urlIdentifier) , id.getBaseUnit(), id.getDescription(), id.getType());
+				}
+				return id;
+			}
+		};
+	}
+
+	@Bean
+	MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+		return registry -> registry.config().commonTags("application", "Test-application");
 	}
 
 	private BeerService beerService;
