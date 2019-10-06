@@ -32,6 +32,7 @@ public class MicrometerApplication {
     /*
     * Customization tag metric name wise.
     */
+/*
 	@Bean
 	public MeterFilter meterFilter() {
 		return new MeterFilter() {
@@ -52,6 +53,7 @@ public class MicrometerApplication {
 			}
 		};
 	}
+*/
 
 	// use property "management.metrics.tags.<Key>=<Value>" instead create a bean in code.
     /*
