@@ -24,20 +24,14 @@ hs_err_pid*
 
 ### IntelliJ IDEA ###
 .idea/*
-.idea/*.xml
-.idea/compiler.xml
-.idea/workspace.xml
-.idea
 *.iws
 *.iml
 *.ipr
 logs
 .settings/*
 
-
 ### Log file
 *.log
 logs/*.*
 target/*
 /target
-.idea/workspace.xml

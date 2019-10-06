@@ -29,6 +29,9 @@ public class MicrometerApplication {
 	}
 
 
+    /*
+    * Customization tag metric name wise.
+    */
 	@Bean
 	public MeterFilter meterFilter() {
 		return new MeterFilter() {
@@ -50,10 +53,13 @@ public class MicrometerApplication {
 		};
 	}
 
-	@Bean
+	// use property "management.metrics.tags.<Key>=<Value>" instead create a bean in code.
+    /*
+    @Bean
 	MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 		return registry -> registry.config().commonTags("application", "Test-application");
 	}
+	*/
 
 	private BeerService beerService;
 
@@ -75,8 +81,12 @@ public class MicrometerApplication {
 		return new Order(amount.intValue(), type);
 	}
 
-	@Bean
+
+	//NOTE: this function gives error of duplicate metrics, bcz I am using @Timed annotation, as below so don't uncomment it:
+	// java.lang.IllegalArgumentException: Prometheus requires that all meters with the same name have the same set of tag keys. There is already an existing meter named 'chetan_hello3_request_seconds' containing tag keys [class, exception, method, version]. The meter you are attempting to register has keys [exception, method, outcome, status, uri, version]
+
+	/*@Bean
 	public TimedAspect timedAspect(MeterRegistry registry) {
 		return new TimedAspect(registry);
-	}
+	}*/
 }

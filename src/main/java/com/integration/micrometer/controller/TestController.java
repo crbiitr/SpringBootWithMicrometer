@@ -32,8 +32,10 @@ public class TestController {
     public String hello2() {
         return "Hello Youtube";
     }
+
+
     @Timed(
-            value = "chetan.hello2.request",
+            value = "chetan.hello3.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
@@ -42,8 +44,10 @@ public class TestController {
     public String hello3() {
         return "Hello Youtube";
     }
+
+
     @Timed(
-            value = "chetan.hello2.request",
+            value = "chetan.hello4.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
